@@ -1,17 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Navber() {
   const navinfo = (
     <>
-      <li>
-        <a>Item 1</a>
-      </li>
-      <li>
-        <a>Item 1</a>
-      </li>
-      <li>
-        <a>Item 1</a>
-      </li>
+       <li><Link to={'/'}>Home </Link></li> 
+       <li><Link to={'/Menu'}>Our Menu </Link></li> 
+      
     </>
   );
   return (
