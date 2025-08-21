@@ -1,13 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import signImg from "../../assets/others/authentication2.png";
 import {
   loadCaptchaEnginge,
   LoadCanvasTemplate,
   validateCaptcha,
 } from "react-simple-captcha";
+import { AuthContext } from "../../Providers/AuthProviders";
+import { Link, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 export default function LogIn() {
   const captcharef = useRef(null);
-  const [disabled , setDisabled]=useState(true)
+  const [disabled, setDisabled] = useState(true);
+  const { user, signIn } = useContext(AuthContext);
+  const naviget = useNavigate();
   useEffect(() => {
     loadCaptchaEnginge(6);
   }, []);
@@ -17,19 +22,30 @@ export default function LogIn() {
     const email = form.email.value;
     const password = form.password.value;
     console.log(email, password);
+
+    signIn(email, password)
+      .then((res) => {
+        res.user, naviget("/");
+      })
+      .catch((err) => {
+        err.message;
+      });
   };
 
   const hadleVelidateCaptcha = () => {
     const user_captcha_value = captcharef.current.value;
 
     if (validateCaptcha(user_captcha_value) == true) {
-      setDisabled(false)
+      setDisabled(false);
     } else {
       alert("Captcha Does Not Match");
     }
   };
   return (
     <div>
+      <Helmet>
+        <title>Bistro Boss || Log In</title>
+      </Helmet>
       <div className="hero bg-base-200 min-h-screen">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
@@ -72,12 +88,15 @@ export default function LogIn() {
                   </button>
                 </div>
                 <input
-               disabled={disabled}
+                  disabled={disabled}
                   className="btn btn-neutral mt-4"
                   type="submit"
                   value="Log In"
                 />
               </fieldset>
+              <p>
+                Don't have account <Link className="text-xl text-green-600" to={"/signup"}>Sign Up</Link>
+              </p>
             </form>
           </div>
         </div>

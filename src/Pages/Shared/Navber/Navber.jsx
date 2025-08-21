@@ -1,15 +1,37 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../Providers/AuthProviders";
 
 export default function Navber() {
+  const { user, logOut } = useContext(AuthContext);
+  const handleSignOut = () => {
+    logOut()
+    .then(() => {});
+  };
   const navinfo = (
     <>
-       <li><Link to={'/'}>Home </Link></li> 
-       <li><Link to={'/Menu'}>Our Menu </Link></li> 
-       <li><Link to={'/ourshop'}>Our Shop </Link></li> 
-       <li><Link to={'/login'}>Log In </Link></li> 
-       <li><Link to={'/signup'}>Sign Up </Link></li> 
-      
+      <li>
+        <Link to={"/"}>Home </Link>
+      </li>
+      <li>
+        <Link to={"/Menu"}>Our Menu </Link>
+      </li>
+      <li>
+        <Link to={"/ourshop"}>Our Shop </Link>
+      </li>
+
+      {user ? (
+        <li>
+          <button onClick={handleSignOut} className="btn btn-ghost">
+            Sign Out
+          </button>
+        </li>
+      ) : (
+        <li>
+          <Link to={"/login"}>Log In </Link>
+        </li>
+        
+      )}
     </>
   );
   return (
