@@ -6,11 +6,6 @@ import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 
-Swal.fire({
-  title: "Drag me!",
-  icon: "success",
-  draggable: true,
-});
 
 export default function SignUp() {
   const {

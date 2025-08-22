@@ -19,6 +19,9 @@ export default function Navber() {
       <li>
         <Link to={"/ourshop"}>Our Shop </Link>
       </li>
+      <li>
+        <Link to={"/secret"}>Secret </Link>
+      </li>
 
       {user ? (
         <li>
