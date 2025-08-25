@@ -1,12 +1,14 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Providers/AuthProviders";
+import { FaShoppingCart } from "react-icons/fa";
+import useCart from "../../../hooks/useCart";
 
 export default function Navber() {
   const { user, logOut } = useContext(AuthContext);
+   const [cart]=useCart()
   const handleSignOut = () => {
-    logOut()
-    .then(() => {});
+    logOut().then(() => {});
   };
   const navinfo = (
     <>
@@ -22,7 +24,14 @@ export default function Navber() {
       <li>
         <Link to={"/secret"}>Secret </Link>
       </li>
-
+      <li>
+        <Link to={'/dashbord/cart'}>
+          <button className=" flex items-center justify-center bg-none">
+          <FaShoppingCart />
+            <div className="badge ml-2 badge-sm badge-secondary">+{cart.length}</div>
+          </button>
+        </Link>
+      </li>
       {user ? (
         <li>
           <button onClick={handleSignOut} className="btn btn-ghost">
@@ -33,7 +42,6 @@ export default function Navber() {
         <li>
           <Link to={"/login"}>Log In </Link>
         </li>
-        
       )}
     </>
   );
