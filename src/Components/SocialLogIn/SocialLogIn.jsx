@@ -40,7 +40,7 @@ const handleGoogleSignIn=()=>{
             ></path>
           </g>
         </svg>
-        Login with Google
+        Signin with Google
       </button>
     </div>
   );
