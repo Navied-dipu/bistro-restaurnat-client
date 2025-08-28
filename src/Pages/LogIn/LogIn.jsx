@@ -13,8 +13,8 @@ export default function LogIn() {
   const [disabled, setDisabled] = useState(true);
   const { user, signIn } = useContext(AuthContext);
   const naviget = useNavigate();
-  const location=useLocation()
-  const from=location?.state?.from?.pathname || '/'
+  const location = useLocation();
+  const from = location?.state?.from?.pathname || "/";
   useEffect(() => {
     loadCaptchaEnginge(6);
   }, []);
@@ -27,8 +27,7 @@ export default function LogIn() {
 
     signIn(email, password)
       .then((res) => {
-        res.user,
-         naviget(from, {replace : true});
+        res.user, naviget(from, { replace: true });
       })
       .catch((err) => {
         err.message;
@@ -98,8 +97,12 @@ export default function LogIn() {
                 />
               </fieldset>
               <p>
-                Don't have account <Link className="text-xl text-green-600" to={"/signup"}>Sign Up</Link>
+                Don't have account{" "}
+                <Link className="text-xl text-green-600" to={"/signup"}>
+                  Sign Up
+                </Link>
               </p>
+           
             </form>
           </div>
         </div>

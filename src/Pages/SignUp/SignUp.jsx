@@ -1,33 +1,52 @@
 import React, { useContext } from "react";
 import signImg from "../../assets/others/authentication2.png";
 import { AuthContext } from "../../Providers/AuthProviders";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
-
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import SocialLogIn from "../../Components/SocialLogIn/SocialLogIn";
 
 export default function SignUp() {
   const {
     register,
     handleSubmit,
+    reset,
     watch,
     formState: { errors },
   } = useForm();
-  const { user, createUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
+  const { user, createUser, updateUserProfile } = useContext(AuthContext);
   const onSubmit = (data) => {
     console.log(data),
-      createUser(data.email, data.password)
-        .then((res) => {
-          const logUser = res.user;
-          console.log(logUser);
-          Swal.fire({
-            title: "Sign Up successfuly",
-            icon: "success",
-            draggable: true,
-          });
-        })
-        .catch((error) => error.massege);
+      createUser(data.email, data.password).then((res) => {
+        const logUser = res.user;
+        console.log(logUser);
+        updateUserProfile(data.name, data.photoURL)
+          .then(() => {
+            console.log("user profile info updated");
+            const userInfo = {
+              name: data.name,
+              email: data.email,
+            };
+            axiosPublic.post("/users", userInfo).then((res) => {
+              if (res.data.insertedId) {
+                reset();
+                Swal.fire({
+                  title: "Sign Up successfuly",
+                  icon: "success",
+                  draggable: true,
+                });
+
+                navigate("/");
+              }
+            });
+          })
+          .catch((err) => console.log(err));
+      });
+    // .catch((error) => error.massege);
   };
 
   // const handleSignUp = (e) => {
@@ -63,18 +82,29 @@ export default function SignUp() {
                 <input
                   type="text"
                   {...register("name", { required: true })}
-                  name="name"
+                  // name="name"
                   className="input"
                   placeholder="Name"
                 />
                 {errors.name && (
                   <span className="text-red-600">Name is required</span>
                 )}
+                <label className="label">Photo URL</label>
+                <input
+                  type="text"
+                  {...register("photoURL", { required: true })}
+                  // name="photoURL"
+                  className="input"
+                  placeholder="Photo url"
+                />
+                {errors.photoURL && (
+                  <span className="text-red-600">Photo is required</span>
+                )}
 
                 <label className="label">Email</label>
                 <input
                   type="email"
-                  name="email"
+                  // name="email"
                   {...register("email", { required: true })}
                   className="input"
                   placeholder="Email"
@@ -82,9 +112,10 @@ export default function SignUp() {
                 {errors.email && (
                   <span className="text-red-600">Email is required</span>
                 )}
+                <label className="label">Password</label>
                 <input
                   type="password"
-                  name="password"
+                  // name="password"
                   {...register("password", {
                     required: true,
                     minLength: 6,
@@ -126,6 +157,7 @@ export default function SignUp() {
                   Log In
                 </Link>
               </p>
+              <SocialLogIn></SocialLogIn>
             </form>
           </div>
         </div>
