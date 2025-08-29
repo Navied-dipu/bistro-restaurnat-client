@@ -1,12 +1,25 @@
 import React from "react";
 import useAuth from "../../hooks/useAuth";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { useNavigate } from "react-router-dom";
 
 export default function SocialLogIn() {
     const {googleSignIn}=useAuth()
+    const axiosPublic=useAxiosPublic()
+    const navigate=useNavigate()
 const handleGoogleSignIn=()=>{
     googleSignIn()
     .then(res =>{
         console.log(res.user)
+        const userinfo={
+          email: res.user.email,
+          name:res.user?.displayName
+        }
+        axiosPublic.post('/users', userinfo)
+        .then( res =>{
+          console.log(res.data)
+          navigate('/')
+        })
     })
 }
   return (
